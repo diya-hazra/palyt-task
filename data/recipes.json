@@ -4,47 +4,16 @@
     "name": "Paneer Butter Masala",
     "price": 320,
     "ingredients": [
-      { "ingredientId": "paneer", "amount": 180, "unit": "g" },
-      { "ingredientId": "tomatoes", "amount": 250, "unit": "g" },
-      { "ingredientId": "butter", "amount": 40, "unit": "g" },
-      { "ingredientId": "cream", "amount": 60, "unit": "ml" },
-      { "ingredientId": "onions", "amount": 80, "unit": "g" },
-      { "ingredientId": "garlic", "amount": 10, "unit": "g" },
-      { "ingredientId": "ginger", "amount": 10, "unit": "g" },
-      { "ingredientId": "garam_masala", "amount": 5, "unit": "g" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
-    ]
-  },
-  {
-    "id": "butter_chicken",
-    "name": "Butter Chicken",
-    "price": 380,
-    "ingredients": [
-      { "ingredientId": "chicken_breast", "amount": 220, "unit": "g" },
-      { "ingredientId": "tomatoes", "amount": 250, "unit": "g" },
-      { "ingredientId": "butter", "amount": 50, "unit": "g" },
-      { "ingredientId": "cream", "amount": 80, "unit": "ml" },
-      { "ingredientId": "onions", "amount": 80, "unit": "g" },
-      { "ingredientId": "garlic", "amount": 10, "unit": "g" },
-      { "ingredientId": "ginger", "amount": 10, "unit": "g" },
-      { "ingredientId": "garam_masala", "amount": 5, "unit": "g" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
-    ]
-  },
-  {
-    "id": "chicken_biryani",
-    "name": "Chicken Biryani",
-    "price": 350,
-    "ingredients": [
-      { "ingredientId": "chicken_breast", "amount": 200, "unit": "g" },
-      { "ingredientId": "basmati_rice", "amount": 300, "unit": "g" },
-      { "ingredientId": "onions", "amount": 100, "unit": "g" },
-      { "ingredientId": "yogurt", "amount": 100, "unit": "g" },
-      { "ingredientId": "ginger", "amount": 10, "unit": "g" },
-      { "ingredientId": "garlic", "amount": 10, "unit": "g" },
-      { "ingredientId": "mustard_oil", "amount": 20, "unit": "ml" },
-      { "ingredientId": "garam_masala", "amount": 5, "unit": "g" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
+      {
+        "ingredientId": "paneer",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cream",
+        "amount": 60,
+        "unit": "ml"
+      }
     ]
   },
   {
@@ -52,13 +21,11 @@
     "name": "Kaju Curry",
     "price": 300,
     "ingredients": [
-      { "ingredientId": "cashews", "amount": 60, "unit": "g" },
-      { "ingredientId": "tomatoes", "amount": 150, "unit": "g" },
-      { "ingredientId": "onions", "amount": 100, "unit": "g" },
-      { "ingredientId": "cream", "amount": 40, "unit": "ml" },
-      { "ingredientId": "butter", "amount": 20, "unit": "g" },
-      { "ingredientId": "garam_masala", "amount": 5, "unit": "g" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
+      {
+        "ingredientId": "cashews",
+        "amount": 60,
+        "unit": "g"
+      }
     ]
   },
   {
@@ -66,36 +33,11 @@
     "name": "Cashew Pulao",
     "price": 260,
     "ingredients": [
-      { "ingredientId": "cashews", "amount": 40, "unit": "g" },
-      { "ingredientId": "basmati_rice", "amount": 250, "unit": "g" },
-      { "ingredientId": "onions", "amount": 60, "unit": "g" },
-      { "ingredientId": "mustard_oil", "amount": 15, "unit": "ml" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
-    ]
-  },
-  {
-    "id": "veg_pulao",
-    "name": "Veg Pulao",
-    "price": 220,
-    "ingredients": [
-      { "ingredientId": "basmati_rice", "amount": 250, "unit": "g" },
-      { "ingredientId": "onions", "amount": 60, "unit": "g" },
-      { "ingredientId": "mustard_oil", "amount": 15, "unit": "ml" },
-      { "ingredientId": "green_chillies", "amount": 10, "unit": "g" },
-      { "ingredientId": "coriander", "amount": 10, "unit": "g" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
-    ]
-  },
-  {
-    "id": "tomato_soup",
-    "name": "Tomato Soup",
-    "price": 150,
-    "ingredients": [
-      { "ingredientId": "tomatoes", "amount": 300, "unit": "g" },
-      { "ingredientId": "butter", "amount": 20, "unit": "g" },
-      { "ingredientId": "cream", "amount": 30, "unit": "ml" },
-      { "ingredientId": "garlic", "amount": 5, "unit": "g" },
-      { "ingredientId": "salt", "amount": 5, "unit": "g" }
+      {
+        "ingredientId": "cashews",
+        "amount": 40,
+        "unit": "g"
+      }
     ]
   }
 ]

@@ -1,264 +1,1311 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Palyt - Kitchen Stock &amp; Menu</title>
-<style>
-  body { font-family: system-ui, sans-serif; margin: 20px; color: #222; }
-  h1 { font-size: 20px; }
-  h2 { font-size: 16px; }
-  .columns { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
-  .column { flex: 1; min-width: 380px; }
-  table { border-collapse: collapse; width: 100%; margin-bottom: 12px; }
-  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; font-size: 14px; }
-  th { background: #f2f2f2; }
-  tr.below-par td { background: #fdecea; }
-  tr.unavailable td { color: #999; }
-  button { cursor: pointer; }
-  .row-actions button { margin-right: 4px; }
-  #ingredientForm { border: 1px solid #ccc; padding: 12px; margin-bottom: 16px; }
-  #ingredientForm label { display: block; margin-bottom: 6px; font-size: 14px; }
-  #ingredientForm input, #ingredientForm select { width: 100%; box-sizing: border-box; padding: 4px; }
-  .errors { color: #b00020; font-size: 13px; margin: 6px 0; }
-  .menu-item { border: 1px solid #ccc; padding: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-  .menu-item.unavailable { opacity: 0.55; }
-  .price { color: #555; }
-  .tag { font-size: 11px; padding: 2px 6px; border-radius: 3px; }
-  .tag.out { background: #fdecea; color: #b00020; }
-  .tag.in { background: #e6f4ea; color: #1e7e34; }
-  #searchBox { margin-bottom: 10px; padding: 4px; width: 250px; }
-  .note { font-size: 12px; color: #666; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Palyt - Kitchen Stock & Menu</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      margin: 0;
+      padding: 24px;
+
+      background: #f7f7f8;
+      color: #222;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0 0 6px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 14px;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin: 0 0 24px;
+    }
+
+    /* =========================
+       MAIN LAYOUT
+       ========================= */
+
+    .columns {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr) minmax(0, 1fr);
+
+      gap: 24px;
+
+      align-items: start;
+    }
+
+    .column {
+      min-width: 0;
+
+      background: #fff;
+
+      border: 1px solid #ddd;
+      border-radius: 8px;
+
+      padding: 18px;
+    }
+
+    /* =========================
+       SEARCH
+       ========================= */
+
+    #searchBox {
+      width: 100%;
+
+      margin-bottom: 12px;
+
+      padding: 9px 10px;
+
+      border: 1px solid #bbb;
+      border-radius: 5px;
+
+      font-size: 14px;
+    }
+
+    /* =========================
+       BUTTONS
+       ========================= */
+
+    button {
+      cursor: pointer;
+
+      border: 1px solid #aaa;
+      background: #fff;
+
+      border-radius: 5px;
+
+      padding: 7px 11px;
+
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #f1f1f1;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    #addIngredientBtn {
+      margin-bottom: 12px;
+    }
+
+    /* =========================
+       TABLE
+       ========================= */
+
+    table {
+      border-collapse: collapse;
+
+      width: 100%;
+
+      margin-bottom: 12px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+
+      padding: 9px 10px;
+
+      text-align: left;
+
+      font-size: 14px;
+    }
+
+    th {
+      background: #f2f2f2;
+
+      font-weight: 600;
+    }
+
+    tr.below-par td {
+      background: #fdecea;
+    }
+
+    .row-actions {
+      white-space: nowrap;
+    }
+
+    .row-actions button {
+      margin-right: 4px;
+    }
+
+    /* =========================
+       INGREDIENT FORM
+       ========================= */
+
+    #ingredientForm {
+      border: 1px solid #ccc;
+
+      background: #fafafa;
+
+      padding: 14px;
+
+      margin-bottom: 16px;
+
+      border-radius: 6px;
+    }
+
+    #ingredientForm label {
+      display: block;
+
+      margin-bottom: 10px;
+
+      font-size: 14px;
+    }
+
+    #ingredientForm input,
+    #ingredientForm select {
+      width: 100%;
+
+      margin-top: 4px;
+
+      padding: 7px;
+
+      border: 1px solid #bbb;
+
+      border-radius: 4px;
+    }
+
+    .errors {
+      color: #b00020;
+
+      font-size: 13px;
+
+      margin: 6px 0 10px;
+    }
+
+    /* =========================
+       MENU
+       ========================= */
+
+    .menu-item {
+      border: 1px solid #ddd;
+
+      background: #fff;
+
+      padding: 12px;
+
+      margin-bottom: 10px;
+
+      border-radius: 6px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 12px;
+    }
+
+    .menu-item.unavailable {
+      opacity: 0.55;
+    }
+
+    .menu-item strong {
+      display: inline-block;
+
+      margin-right: 8px;
+    }
+
+    .price {
+      color: #555;
+
+      margin-right: 8px;
+    }
+
+    .tag {
+      display: inline-block;
+
+      font-size: 11px;
+
+      padding: 3px 7px;
+
+      border-radius: 10px;
+    }
+
+    .tag.out {
+      background: #fdecea;
+
+      color: #b00020;
+    }
+
+    .tag.in {
+      background: #e6f4ea;
+
+      color: #1e7e34;
+    }
+
+    /* =========================
+       STATUS / EMPTY STATES
+       ========================= */
+
+    .empty-state {
+      color: #777;
+
+      font-size: 14px;
+
+      padding: 20px;
+
+      text-align: center;
+
+      border: 1px dashed #ccc;
+
+      border-radius: 6px;
+    }
+
+    .load-error {
+      color: #b00020;
+
+      background: #fdecea;
+
+      border: 1px solid #f5c2c0;
+
+      padding: 12px;
+
+      border-radius: 6px;
+
+      font-size: 14px;
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 800px) {
+      body {
+        padding: 14px;
+      }
+
+      .columns {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-item {
+        flex-direction: column;
+
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Palyt - Kitchen</h1>
-<p class="note">Stock on the left. What the diner sees on the right. Order a dish and watch both update.</p>
+  <h1>Palyt - Kitchen</h1>
 
-<div class="columns">
+  <p class="note">
+    Stock on the left. What the diner sees on the right.
+    Order a dish and watch both update.
+  </p>
 
-  <div class="column">
-    <h2>Stock</h2>
-    <input id="searchBox" type="text" placeholder="Search ingredients...">
+  <div id="runtimeError" class="load-error" role="alert" hidden></div>
 
-    <div id="ingredientForm" style="display:none;">
-      <div class="errors" id="formErrors"></div>
-      <label>Name <input id="fName" type="text"></label>
-      <label>Quantity <input id="fQty" type="number" step="any"></label>
-      <label>Unit
-        <select id="fUnit">
-          <option value="kg">kg</option>
-          <option value="g">g</option>
-          <option value="l">l</option>
-          <option value="ml">ml</option>
-          <option value="piece">piece</option>
-        </select>
-      </label>
-      <label>Par level <input id="fPar" type="number" step="any"></label>
-      <button id="saveIngredientBtn">Save</button>
-      <button id="cancelFormBtn">Cancel</button>
+  <div class="columns">
+
+    <!-- =========================
+         STOCK
+         ========================= -->
+
+    <div class="column">
+
+      <h2>Stock</h2>
+
+      <input id="searchBox" type="text" placeholder="Search ingredients...">
+
+      <div id="ingredientForm" style="display: none;">
+
+        <div class="errors" id="formErrors"></div>
+
+        <label>
+          Name
+
+          <input id="fName" type="text">
+        </label>
+
+        <label>
+          Quantity
+
+          <input id="fQty" type="number" step="any">
+        </label>
+
+        <label>
+          Unit
+
+          <select id="fUnit">
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="l">l</option>
+            <option value="ml">ml</option>
+            <option value="piece">piece</option>
+          </select>
+        </label>
+
+        <label>
+          Par level
+
+          <input id="fPar" type="number" step="any">
+        </label>
+
+        <button id="saveIngredientBtn">
+          Save
+        </button>
+
+        <button id="cancelFormBtn">
+          Cancel
+        </button>
+
+      </div>
+
+      <button id="addIngredientBtn">
+        + Add ingredient
+      </button>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Qty</th>
+            <th>Par</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="stockTableBody"></tbody>
+
+      </table>
+
     </div>
-    <button id="addIngredientBtn">+ Add ingredient</button>
 
-    <table>
-      <thead>
-        <tr><th>Ingredient</th><th>Qty</th><th>Par</th><th></th></tr>
-      </thead>
-      <tbody id="stockTableBody"></tbody>
-    </table>
+
+    <!-- =========================
+         MENU
+         ========================= -->
+
+    <div class="column">
+
+      <h2>Menu (diner view)</h2>
+
+      <div id="menuList"></div>
+
+    </div>
+
   </div>
 
-  <div class="column">
-    <h2>Menu (diner view)</h2>
-    <div id="menuList"></div>
-  </div>
 
-</div>
+  <!-- Logic module -->
 
-<script src="src/logic.js"></script>
-<script>
-const {
-  getMenuWithAvailability,
-  deductStockForOrder,
-  canDeleteIngredient,
-  deleteIngredient,
-  validateIngredient,
-} = window.PalytLogic;
+  <script src="./src/logic.js"></script>
 
-let stock = [];
-let recipes = [];
-let editingId = null; // ingredient currently being edited, or null when adding
+  <script>
+    function showRuntimeError(error) {
+      const message = error && error.message ? error.message : String(error);
+      console.error('Palyt application error:', error);
+      const panel = document.getElementById('runtimeError');
+      if (panel) {
+        panel.textContent = `The application could not render: ${message}`;
+        panel.hidden = false;
+      }
+    }
 
-async function loadData() {
-  const [stockRes, recipesRes] = await Promise.all([
-    fetch('data/stock.json'),
-    fetch('data/recipes.json'),
-  ]);
-  stock = await stockRes.json();
-  recipes = await recipesRes.json();
-}
-
-function render() {
-  renderStockTable();
-  renderMenu();
-}
-
-function renderStockTable() {
-  const query = document.getElementById('searchBox').value.trim().toLowerCase();
-  const tbody = document.getElementById('stockTableBody');
-  tbody.innerHTML = '';
-
-  stock
-    .filter((item) => item.name.toLowerCase().includes(query))
-    .forEach((item) => {
-      const belowPar = toComparable(item.quantity, item.unit) < toComparable(item.par, item.unit);
-      const tr = document.createElement('tr');
-      if (belowPar) tr.className = 'below-par';
-
-      tr.innerHTML = `
-        <td>${escapeHtml(item.name)}</td>
-        <td>${item.quantity} ${item.unit}</td>
-        <td>${item.par} ${item.unit}</td>
-        <td class="row-actions">
-          <button data-edit="${item.id}">Edit</button>
-          <button data-delete="${item.id}">Delete</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
+    window.addEventListener('error', (event) => {
+      showRuntimeError(event.error || event.message);
     });
 
-  tbody.querySelectorAll('[data-edit]').forEach((btn) =>
-    btn.addEventListener('click', () => openForm(btn.dataset.edit))
-  );
-  tbody.querySelectorAll('[data-delete]').forEach((btn) =>
-    btn.addEventListener('click', () => handleDelete(btn.dataset.delete))
-  );
-}
+    window.addEventListener('unhandledrejection', (event) => {
+      showRuntimeError(event.reason);
+    });
+  </script>
 
-// convert to same base unit just for the below-par row highlight (kg/l -> *1000)
-function toComparable(amount, unit) {
-  return (unit === 'kg' || unit === 'l') ? amount * 1000 : amount;
-}
-
-function renderMenu() {
-  const menu = getMenuWithAvailability(recipes, stock);
-  const container = document.getElementById('menuList');
-  container.innerHTML = '';
-
-  menu.forEach((dish) => {
-    const div = document.createElement('div');
-    div.className = 'menu-item' + (dish.available ? '' : ' unavailable');
-    div.innerHTML = `
-      <div>
-        <strong>${escapeHtml(dish.name)}</strong>
-        <span class="price">Rs ${dish.price}</span>
-        <span class="tag ${dish.available ? 'in' : 'out'}">
-          ${dish.available ? 'Available' : 'Not available'}
-        </span>
+  <script>
+    if (!window.PalytLogic) {
+      document.body.innerHTML = `
+      <div style="
+        font-family: system-ui;
+        padding: 30px;
+        color: #b00020;
+      ">
+        <h2>JavaScript failed to load</h2>
+        <p>
+          src/logic.js could not be loaded or contains a syntax error.
+        </p>
       </div>
-      <button ${dish.available ? '' : 'disabled'} data-order="${dish.id}">Order</button>
     `;
-    container.appendChild(div);
-  });
 
-  container.querySelectorAll('[data-order]').forEach((btn) =>
-    btn.addEventListener('click', () => handleOrder(btn.dataset.order))
-  );
-}
+      throw new Error('PalytLogic was not loaded.');
+    }
+  </script>
 
-function handleOrder(dishId) {
-  const dish = recipes.find((d) => d.id === dishId);
-  try {
-    stock = deductStockForOrder(dish, stock);
-    render();
-  } catch (err) {
-    alert(err.message);
-  }
-}
+  <script>
 
-function openForm(ingredientId) {
-  editingId = ingredientId || null;
-  const form = document.getElementById('ingredientForm');
-  form.style.display = 'block';
-  document.getElementById('formErrors').textContent = '';
+    const {
+      getMenuWithAvailability,
+      deductStockForOrder,
+      canDeleteIngredient,
+      deleteIngredient,
+      validateIngredient,
+    } = window.PalytLogic;
 
-  if (editingId) {
-    const item = stock.find((s) => s.id === editingId);
-    document.getElementById('fName').value = item.name;
-    document.getElementById('fQty').value = item.quantity;
-    document.getElementById('fUnit').value = item.unit;
-    document.getElementById('fPar').value = item.par;
-  } else {
-    document.getElementById('fName').value = '';
-    document.getElementById('fQty').value = '';
-    document.getElementById('fUnit').value = 'kg';
-    document.getElementById('fPar').value = '';
-  }
-}
 
-function closeForm() {
-  editingId = null;
-  document.getElementById('ingredientForm').style.display = 'none';
-}
+    let stock = [];
 
-function handleSave() {
-  const input = {
-    name: document.getElementById('fName').value,
-    quantity: parseFloat(document.getElementById('fQty').value),
-    unit: document.getElementById('fUnit').value,
-    par: parseFloat(document.getElementById('fPar').value),
-  };
+    let recipes = [];
 
-  const errors = validateIngredient(input, stock, { editingId });
-  if (errors.length) {
-    document.getElementById('formErrors').textContent = errors.join(' ');
-    return;
-  }
+    let editingId = null;
 
-  if (editingId) {
-    stock = stock.map((s) => (s.id === editingId ? { ...s, ...input } : s));
-  } else {
-    const id = input.name.trim().toLowerCase().replace(/\s+/g, '_');
-    stock = [...stock, { id, ...input }];
-  }
 
-  closeForm();
-  render();
-}
+    /* =========================
+       LOAD DATA
+       ========================= */
 
-function handleDelete(ingredientId) {
-  const { canDelete, affectedDishes } = canDeleteIngredient(ingredientId, recipes);
+    async function loadData() {
 
-  if (canDelete) {
-    stock = stock.filter((s) => s.id !== ingredientId);
-    render();
-    return;
-  }
+      try {
 
-  const confirmed = confirm(
-    `${affectedDishes.join(', ')} use this ingredient. Deleting it will take those dishes ` +
-    `off the menu until someone edits the recipe. Delete anyway?`
-  );
-  if (!confirmed) return;
+        const [
+          stockRes,
+          recipesRes
+        ] = await Promise.all([
 
-  const result = deleteIngredient(ingredientId, stock, recipes, { force: true });
-  stock = result.stock;
-  recipes = result.recipes;
-  render();
-}
+          fetch('./data/stock.json'),
 
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
+          fetch('./data/recipes.json'),
 
-document.getElementById('addIngredientBtn').addEventListener('click', () => openForm(null));
-document.getElementById('cancelFormBtn').addEventListener('click', closeForm);
-document.getElementById('saveIngredientBtn').addEventListener('click', handleSave);
-document.getElementById('searchBox').addEventListener('input', renderStockTable);
+        ]);
 
-loadData().then(render);
-</script>
+
+        if (!stockRes.ok) {
+
+          throw new Error(
+            `Could not load stock.json: HTTP ${stockRes.status}`
+          );
+
+        }
+
+
+        if (!recipesRes.ok) {
+
+          throw new Error(
+            `Could not load recipes.json: HTTP ${recipesRes.status}`
+          );
+
+        }
+
+
+        const stockData =
+          await stockRes.json();
+
+        const recipesData =
+          await recipesRes.json();
+
+
+        if (!Array.isArray(stockData)) {
+
+          throw new Error(
+            'stock.json must contain an array.'
+          );
+
+        }
+
+
+        if (!Array.isArray(recipesData)) {
+
+          throw new Error(
+            'recipes.json must contain an array.'
+          );
+
+        }
+
+
+        stock = stockData;
+
+        recipes = recipesData;
+
+
+        console.log('Stock loaded:', stock);
+
+        console.log('Recipes loaded:', recipes);
+
+
+        return true;
+
+      } catch (error) {
+
+        console.error(
+          'Failed to load application data:',
+          error
+        );
+
+
+        document.getElementById(
+          'stockTableBody'
+        ).innerHTML = `
+
+          <tr>
+
+            <td
+              colspan="4"
+              class="load-error"
+            >
+              ${escapeHtml(error.message)}
+            </td>
+
+          </tr>
+
+        `;
+
+
+        document.getElementById(
+          'menuList'
+        ).innerHTML = `
+
+          <div class="load-error">
+
+            Failed to load menu data:
+
+            ${escapeHtml(error.message)}
+
+          </div>
+
+        `;
+
+
+        return false;
+      }
+    }
+
+
+    /* =========================
+       RENDER EVERYTHING
+       ========================= */
+
+    function render() {
+
+      renderStockTable();
+
+      renderMenu();
+
+    }
+
+
+    /* =========================
+       STOCK TABLE
+       ========================= */
+
+    function renderStockTable() {
+
+      const query =
+        document
+          .getElementById('searchBox')
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const tbody =
+        document.getElementById(
+          'stockTableBody'
+        );
+
+
+      tbody.innerHTML = '';
+
+
+      const filteredStock =
+        stock.filter((item) =>
+          item.name
+            .toLowerCase()
+            .includes(query)
+        );
+
+
+      if (filteredStock.length === 0) {
+
+        tbody.innerHTML = `
+
+          <tr>
+
+            <td
+              colspan="4"
+              class="empty-state"
+            >
+              No ingredients found.
+            </td>
+
+          </tr>
+
+        `;
+
+        return;
+      }
+
+
+      filteredStock.forEach((item) => {
+
+        const belowPar =
+          toComparable(
+            item.quantity,
+            item.unit
+          ) <
+          toComparable(
+            item.par,
+            item.unit
+          );
+
+
+        const tr =
+          document.createElement('tr');
+
+
+        if (belowPar) {
+
+          tr.className = 'below-par';
+
+        }
+
+
+        tr.innerHTML = `
+
+          <td>
+            ${escapeHtml(item.name)}
+          </td>
+
+          <td>
+            ${item.quantity} ${item.unit}
+          </td>
+
+          <td>
+            ${item.par} ${item.unit}
+          </td>
+
+          <td class="row-actions">
+
+            <button
+              data-edit="${escapeHtml(item.id)}"
+            >
+              Edit
+            </button>
+
+            <button
+              data-delete="${escapeHtml(item.id)}"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+      });
+
+
+      tbody
+        .querySelectorAll('[data-edit]')
+        .forEach((btn) => {
+
+          btn.addEventListener(
+            'click',
+            () =>
+              openForm(
+                btn.dataset.edit
+              )
+          );
+
+        });
+
+
+      tbody
+        .querySelectorAll('[data-delete]')
+        .forEach((btn) => {
+
+          btn.addEventListener(
+            'click',
+            () =>
+              handleDelete(
+                btn.dataset.delete
+              )
+          );
+
+        });
+
+    }
+
+
+    /* =========================
+       COMPARISON
+       ========================= */
+
+    function toComparable(amount, unit) {
+
+      if (
+        unit === 'kg' ||
+        unit === 'l'
+      ) {
+
+        return amount * 1000;
+
+      }
+
+      return amount;
+
+    }
+
+
+    /* =========================
+       MENU
+       ========================= */
+
+    function renderMenu() {
+
+      const menu =
+        getMenuWithAvailability(
+          recipes,
+          stock
+        );
+
+
+      const container =
+        document.getElementById(
+          'menuList'
+        );
+
+
+      container.innerHTML = '';
+
+
+      if (menu.length === 0) {
+
+        container.innerHTML = `
+
+          <div class="empty-state">
+            No dishes available.
+          </div>
+
+        `;
+
+        return;
+      }
+
+
+      menu.forEach((dish) => {
+
+        const div =
+          document.createElement('div');
+
+
+        div.className =
+          'menu-item' +
+          (
+            dish.available
+              ? ''
+              : ' unavailable'
+          );
+
+
+        div.innerHTML = `
+
+          <div>
+
+            <strong>
+              ${escapeHtml(dish.name)}
+            </strong>
+
+            <span class="price">
+              Rs ${dish.price}
+            </span>
+
+            <span
+              class="tag ${dish.available
+            ? 'in'
+            : 'out'
+          }"
+            >
+
+              ${dish.available
+            ? 'Available'
+            : escapeHtml(dish.availabilityMessage || 'Not available')
+          }
+
+            </span>
+
+          </div>
+
+
+          <button
+            ${dish.available
+            ? ''
+            : 'disabled'
+          }
+
+            data-order="${escapeHtml(dish.id)}"
+          >
+            Order
+          </button>
+
+        `;
+
+
+        container.appendChild(div);
+
+      });
+
+
+      container
+        .querySelectorAll('[data-order]')
+        .forEach((btn) => {
+
+          btn.addEventListener(
+            'click',
+            () =>
+              handleOrder(
+                btn.dataset.order
+              )
+          );
+
+        });
+
+    }
+
+
+    /* =========================
+       ORDER
+       ========================= */
+
+    function handleOrder(dishId) {
+
+      const dish =
+        recipes.find(
+          (d) => d.id === dishId
+        );
+
+
+      if (!dish) {
+
+        alert(
+          'Dish not found.'
+        );
+
+        return;
+      }
+
+
+      try {
+
+        stock =
+          deductStockForOrder(
+            dish,
+            stock
+          );
+
+
+        render();
+
+      } catch (err) {
+
+        alert(err.message);
+
+      }
+
+    }
+
+
+    /* =========================
+       OPEN FORM
+       ========================= */
+
+    function openForm(ingredientId) {
+
+      editingId =
+        ingredientId || null;
+
+
+      const form =
+        document.getElementById(
+          'ingredientForm'
+        );
+
+
+      form.style.display = 'block';
+
+
+      document.getElementById(
+        'formErrors'
+      ).textContent = '';
+
+
+      if (editingId) {
+
+        const item =
+          stock.find(
+            (s) => s.id === editingId
+          );
+
+
+        if (!item) {
+
+          return;
+
+        }
+
+
+        document.getElementById(
+          'fName'
+        ).value = item.name;
+
+
+        document.getElementById(
+          'fQty'
+        ).value = item.quantity;
+
+
+        document.getElementById(
+          'fUnit'
+        ).value = item.unit;
+
+
+        document.getElementById(
+          'fPar'
+        ).value = item.par;
+
+      } else {
+
+        document.getElementById(
+          'fName'
+        ).value = '';
+
+
+        document.getElementById(
+          'fQty'
+        ).value = '';
+
+
+        document.getElementById(
+          'fUnit'
+        ).value = 'kg';
+
+
+        document.getElementById(
+          'fPar'
+        ).value = '';
+
+      }
+
+    }
+
+
+    /* =========================
+       CLOSE FORM
+       ========================= */
+
+    function closeForm() {
+
+      editingId = null;
+
+      document.getElementById(
+        'ingredientForm'
+      ).style.display = 'none';
+
+    }
+
+
+    /* =========================
+       SAVE INGREDIENT
+       ========================= */
+
+    function handleSave() {
+
+      const input = {
+
+        name:
+          document.getElementById(
+            'fName'
+          ).value,
+
+        quantity:
+          parseFloat(
+            document.getElementById(
+              'fQty'
+            ).value
+          ),
+
+        unit:
+          document.getElementById(
+            'fUnit'
+          ).value,
+
+        par:
+          parseFloat(
+            document.getElementById(
+              'fPar'
+            ).value
+          ),
+
+      };
+
+
+      const errors =
+        validateIngredient(
+          input,
+          stock,
+          { editingId }
+        );
+
+
+      if (errors.length) {
+
+        document.getElementById(
+          'formErrors'
+        ).textContent =
+          errors.join(' ');
+
+        return;
+
+      }
+
+
+      if (editingId) {
+
+        stock =
+          stock.map((s) =>
+
+            s.id === editingId
+
+              ? {
+                ...s,
+                ...input,
+              }
+
+              : s
+
+          );
+
+      } else {
+
+        const id =
+          input.name
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, '_');
+
+
+        stock = [
+
+          ...stock,
+
+          {
+            id,
+            ...input,
+          },
+
+        ];
+
+      }
+
+
+      closeForm();
+
+      render();
+
+    }
+
+
+    /* =========================
+       DELETE
+       ========================= */
+
+    function handleDelete(ingredientId) {
+
+      const {
+        canDelete,
+        affectedDishes,
+      } =
+        canDeleteIngredient(
+          ingredientId,
+          recipes
+        );
+
+
+      if (canDelete) {
+
+        stock =
+          stock.filter(
+            (s) =>
+              s.id !== ingredientId
+          );
+
+
+        render();
+
+        return;
+
+      }
+
+
+      const confirmed =
+        confirm(
+
+          `${affectedDishes.join(
+            ', '
+          )} use this ingredient.\n\n` +
+
+          `Deleting it will take those dishes ` +
+
+          `off the menu until someone edits ` +
+
+          `the recipe.\n\n` +
+
+          `Delete anyway?`
+
+        );
+
+
+      if (!confirmed) {
+
+        return;
+
+      }
+
+
+      const result =
+        deleteIngredient(
+
+          ingredientId,
+
+          stock,
+
+          recipes,
+
+          {
+            force: true,
+          }
+
+        );
+
+
+      stock =
+        result.stock;
+
+
+      recipes =
+        result.recipes;
+
+
+      render();
+
+    }
+
+
+    /* =========================
+       HTML ESCAPING
+       ========================= */
+
+    function escapeHtml(str) {
+
+      const div =
+        document.createElement(
+          'div'
+        );
+
+
+      div.textContent =
+        String(str);
+
+
+      return div.innerHTML;
+
+    }
+
+
+    /* =========================
+       EVENT LISTENERS
+       ========================= */
+
+    document
+      .getElementById(
+        'addIngredientBtn'
+      )
+      .addEventListener(
+        'click',
+        () => openForm(null)
+      );
+
+
+    document
+      .getElementById(
+        'cancelFormBtn'
+      )
+      .addEventListener(
+        'click',
+        closeForm
+      );
+
+
+    document
+      .getElementById(
+        'saveIngredientBtn'
+      )
+      .addEventListener(
+        'click',
+        handleSave
+      );
+
+
+    document
+      .getElementById(
+        'searchBox'
+      )
+      .addEventListener(
+        'input',
+        renderStockTable
+      );
+
+
+    /* =========================
+       START APP
+       ========================= */
+
+    loadData()
+      .then((success) => {
+        if (success) {
+          render();
+        }
+      })
+      .catch(showRuntimeError);
+
+  </script>
+
 </body>
+
 </html>
