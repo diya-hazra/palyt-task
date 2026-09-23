@@ -1,0 +1,20 @@
+[
+  { "id": "paneer",            "name": "Paneer",             "quantity": 4.5,  "unit": "kg", "par": 2 },
+  { "id": "chicken_breast",    "name": "Chicken Breast",     "quantity": 6,    "unit": "kg", "par": 3 },
+  { "id": "basmati_rice",      "name": "Basmati Rice",       "quantity": 15,   "unit": "kg", "par": 5 },
+  { "id": "onions",            "name": "Onions",             "quantity": 8,    "unit": "kg", "par": 3 },
+  { "id": "tomatoes",          "name": "Tomatoes",           "quantity": 5,    "unit": "kg", "par": 2 },
+  { "id": "garlic",            "name": "Garlic",             "quantity": 1.2,  "unit": "kg", "par": 0.5 },
+  { "id": "ginger",            "name": "Ginger",             "quantity": 0.9,  "unit": "kg", "par": 0.4 },
+  { "id": "cashews",           "name": "Cashews",            "quantity": 0.55, "unit": "kg", "par": 0.5 },
+  { "id": "cream",             "name": "Cream",              "quantity": 2,    "unit": "l",  "par": 1 },
+  { "id": "butter",            "name": "Butter",             "quantity": 3,    "unit": "kg", "par": 1 },
+  { "id": "yogurt",            "name": "Yogurt",             "quantity": 2,    "unit": "kg", "par": 1 },
+  { "id": "green_chillies",    "name": "Green Chillies",     "quantity": 0.5,  "unit": "kg", "par": 0.2 },
+  { "id": "coriander",         "name": "Coriander",          "quantity": 0.4,  "unit": "kg", "par": 0.2 },
+  { "id": "bay_leaves",        "name": "Bay Leaves",         "quantity": 0.05, "unit": "kg", "par": 0.02 },
+  { "id": "salt",              "name": "Salt",               "quantity": 5,    "unit": "kg", "par": 2 },
+  { "id": "red_chilli_powder", "name": "Red Chilli Powder",  "quantity": 1,    "unit": "kg", "par": 0.3 },
+  { "id": "garam_masala",      "name": "Garam Masala",       "quantity": 0.6,  "unit": "kg", "par": 0.2 },
+  { "id": "mustard_oil",       "name": "Mustard Oil",        "quantity": 3,    "unit": "l",  "par": 1 }
+]
